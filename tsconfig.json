@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "types": ["node", "@types/hapi__hapi"],
+    "target": "es6",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node"
+  }
+}
+
