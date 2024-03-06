@@ -1,4 +1,5 @@
 "use strict";
+// services/user.service.ts
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,48 +37,65 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// server.ts
-var hapi_1 = require("@hapi/hapi");
-var mongoose_1 = require("mongoose");
-var routes_1 = require("./routes/routes");
-var init = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var server, MONGODB_URL, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                server = hapi_1.default.server({
-                    port: 3000,
-                    host: 'localhost'
-                });
-                MONGODB_URL = 'mongodb://localhost:27017/mydatabase';
-                _a.label = 1;
-            case 1:
-                _a.trys.push([1, 3, , 4]);
-                return [4 /*yield*/, mongoose_1.default.connect(MONGODB_URL, {
-                        useNewUrlParser: true,
-                        useUnifiedTopology: true,
-                    })];
-            case 2:
-                _a.sent();
-                console.log('MongoDB connected');
-                return [3 /*break*/, 4];
-            case 3:
-                error_1 = _a.sent();
-                console.error('MongoDB connection error:', error_1);
-                process.exit(1);
-                return [3 /*break*/, 4];
-            case 4:
-                server.route(routes_1.default);
-                return [4 /*yield*/, server.start()];
-            case 5:
-                _a.sent();
-                console.log('Server running on %s', server.info.uri);
-                return [2 /*return*/];
-        }
-    });
-}); };
-process.on('unhandledRejection', function (err) {
-    console.error('Unhandled rejection', err);
-    process.exit(1);
-});
-init();
+exports.createUser = exports.UserService = void 0;
+var userrepository_1 = require("../repositories/userrepository");
+var UserService = /** @class */ (function () {
+    function UserService() {
+    }
+    UserService.createUser = function (userData) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userrepository_1.UserRepository.create(userData)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserService.getUsers = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userrepository_1.UserRepository.findAll()];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserService.getUser = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userrepository_1.UserRepository.findByEmail(email)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserService.updateUser = function (email, newData) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userrepository_1.UserRepository.updateByEmail(email, newData)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    UserService.deleteUser = function (email) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, userrepository_1.UserRepository.deleteByEmail(email)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    return UserService;
+}());
+exports.UserService = UserService;
+function createUser(userData) {
+    throw new Error('Function not implemented.');
+}
+exports.createUser = createUser;

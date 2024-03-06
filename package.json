@@ -13,12 +13,14 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^21.3.3",
+    "@hapi/joi": "^17.1.1",
     "mongoose": "^8.2.0"
   },
   "devDependencies": {
     "@types/hapi__hapi": "^21.0.0",
+    "@types/hapi__joi": "^17.1.14",
     "@types/mongoose": "^5.11.97",
-    "ts-node": "^10.9.2",
+    "ts-node": "^10.0.0",
     "typescript": "^5.3.3"
   }
 }

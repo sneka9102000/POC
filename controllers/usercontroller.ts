@@ -1,33 +1,35 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
-import User, { IUser } from '../models/usermodel';
-import mongoose, { UpdateQuery } from 'mongoose';
+import { UserService } from '../services/userservice';
+import { IUser } from '../models/usermodel';
+import * as validation from '../validations/uservalidation'; 
 
 export const createUser = async (request: Request, h: ResponseToolkit) => {
   try {
-    const user: IUser = new User(request.payload);
-    await user.save();
-    return h.response(user).code(201);
-  } catch (error: any) { 
-    console.error(error); 
-    return h.response({ message: "Internal Server Error" }).code(500);
+    const userData: IUser = request.payload as IUser;
+    const { error, value } = validation.createUserSchema.validate(userData);
+    if (error) {
+      return h.response(error.details[0].message).code(400); 
+    }
+    const newUser = await UserService.createUser(userData);
+    return h.response(newUser).code(201);
+  } catch (error:any) {
+    return h.response(error.message).code(500);
   }
 };
-
 
 export const getUsers = async (request: Request, h: ResponseToolkit) => {
   try {
-    const users: IUser[] = await User.find();
+    const users = await UserService.getUsers();
     return h.response(users).code(200);
   } catch (error:any) {
-    return h.response(error).code(500);
+    return h.response(error.message).code(500);
   }
 };
-
 
 export const getUserByEmail = async (request: Request, h: ResponseToolkit) => {
   try {
     const userEmail = request.params.email;
-    const user: IUser | null = await User.findOne({ email: userEmail });
+    const user = await UserService.getUser(userEmail);
     if (!user) {
       return h.response({ error: 'User not found', email: userEmail }).code(404);
     }
@@ -36,43 +38,40 @@ export const getUserByEmail = async (request: Request, h: ResponseToolkit) => {
     return h.response({ error: 'Internal server error', message: error.message }).code(500);
   }
 };
-
-
 export const updateUser = async (request: Request, h: ResponseToolkit) => {
   try {
     const userEmail = request.params.email;
-    // Parse the payload if it's a string
-    const payload: UpdateQuery<IUser> = typeof request.payload === 'string' ? JSON.parse(request.payload) : request.payload;
+        const { error, value } = validation.updateUserSchema.validate(request.payload);
+    if (error) {
+      return h.response(error.details[0].message).code(400);
+    }
     
-    // Perform the update operation
-    await User.findOneAndUpdate(
-      { email: userEmail },
-      payload,
-      { new: true } // Returns the updated document
-    );
+    // Remove _id field from payload
+    const payload: Partial<IUser> = { ...value };
+    delete payload._id;
 
-    // Fetch the updated user
-    const updatedUser: IUser | null = await User.findOne({ email: userEmail });
+    const updatedUser = await UserService.updateUser(userEmail, payload);
     if (!updatedUser) {
       return h.response('User not found').code(404);
     }
     return h.response(updatedUser).code(200);
   } catch (error:any) {
-    return h.response(error).code(500);
+    return h.response(error.message).code(500);
   }
 };
+
 
 
 
 export const deleteUser = async (request: Request, h: ResponseToolkit) => {
   try {
     const userEmail = request.params.email;
-    const deletedUser: IUser | null = await User.findOneAndDelete({ email: userEmail });
+    const deletedUser = await UserService.deleteUser(userEmail);
     if (!deletedUser) {
       return h.response('User not found').code(404);
     }
     return h.response(deletedUser).code(200);
   } catch (error:any) {
-    return h.response(error).code(500);
+    return h.response(error.message).code(500);
   }
 };
