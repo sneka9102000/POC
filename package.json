@@ -14,11 +14,13 @@
   "dependencies": {
     "@hapi/hapi": "^21.3.3",
     "@hapi/joi": "^17.1.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.0"
   },
   "devDependencies": {
     "@types/hapi__hapi": "^21.0.0",
     "@types/hapi__joi": "^17.1.14",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "ts-node": "^10.0.0",
     "typescript": "^5.3.3"
