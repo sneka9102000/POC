@@ -2,25 +2,36 @@ import { Request, ResponseToolkit } from '@hapi/hapi';
 import { UserService } from '../services/userService';
 import { IUser } from '../models/userModel';
 import * as validation from '../validations/userValidation'; 
+import RoleModel from '../models/roleModel'; 
 
 export const createUser = async (request: Request, h: ResponseToolkit) => {
   try {
+
     const userData: IUser = request.payload as IUser;
-     if (userData.residential_address) {
-      delete userData.residential_address._id;
-    }
-    const { error, value } = validation.createUserSchema.validate(userData);
-    if (error) {
-      return h.response(error.details[0].message).code(400); 
-    }
     const newUser = await UserService.createUser(userData);
-    return h.response(newUser).code(201);
-  } catch (error:any) {
-    return h.response(error.message).code(500);
+
+    const role = await RoleModel.findOne({ role: userData.role });
+
+    if (!role) {
+      const newRole = await RoleModel.create({ role: userData.role, users: [newUser._id] });
+      console.log(`Role '${userData.role}' created with user '${newUser.name}'`);
+    } else {
+      role.users.push({ userid: newUser._id, name: newUser.name });
+      await role.save();
+      console.log(`User '${newUser.name}' added to role '${userData.role}'`);
+    }
+
+    return newUser;
+  } 
+  catch (error) {
+    // console.error('Error creating user:', error);
+    throw error;
   }
 };
 
+
 export const getUsers = async (request: Request, h: ResponseToolkit) => {
+  console.log("hello")
   try {
     const users = await UserService.getUsers();
     return h.response(users).code(200);

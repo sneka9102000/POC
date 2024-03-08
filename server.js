@@ -17,14 +17,22 @@ const hapi_1 = __importDefault(require("@hapi/hapi"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const routes_1 = __importDefault(require("./routes/routes"));
 const dotenv_1 = __importDefault(require("dotenv"));
+
+require('dotenv').config();
+
+
 dotenv_1.default.config();
+
 const init = () => __awaiter(void 0, void 0, void 0, function* () {
     const server = hapi_1.default.server({
         port: 3000,
         host: 'localhost'
     });
+
+
     // MongoDB connection URL from env
     const MONGODB = process.env.MONGODB_URL;
+
     if (!MONGODB) {
         console.error('MongoDB connection URL is not provided in the environment variables.');
         process.exit(1);
@@ -34,7 +42,7 @@ const init = () => __awaiter(void 0, void 0, void 0, function* () {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
-        console.log('MongoDB connected');
+        console.log('MongoDB connected ');
     }
     catch (error) {
         console.error('MongoDB connection error:', error);

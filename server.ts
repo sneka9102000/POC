@@ -21,8 +21,6 @@ const init = async () => {
     process.exit(1);
   }
 
-
-
   try {
     await mongoose.connect(MONGODB, {
       useNewUrlParser: true,

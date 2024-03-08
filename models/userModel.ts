@@ -12,6 +12,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   residential_address: IAddress; 
+  role: 'admin' | 'employee' | 'user';
 }
 
 const UserSchema: Schema = new Schema({
@@ -24,6 +25,7 @@ const UserSchema: Schema = new Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
   },
+  role: { type: String, enum: ['admin', 'employee', 'user'], required: true },
 });
 
 export default mongoose.model<IUser>('Users', UserSchema);

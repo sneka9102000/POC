@@ -1,11 +1,17 @@
 {
   "compilerOptions": {
-    "types": ["node", "@types/hapi__hapi"],
     "target": "es6",
     "module": "commonjs",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "node"
-  }
-}
+    "moduleResolution": "node",
+    "outDir": "build" ,
+    "types": ["node","@hapi/joi"],
+    "typeRoots": ["node_modules/@types"],
+    "allowJs": false
 
+  },
+  "exclude": [
+    "node_modules"
+  ],
+}

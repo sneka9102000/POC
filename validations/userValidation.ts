@@ -10,6 +10,7 @@ export const createUserSchema = Joi.object({
     state: Joi.string().required(),
     city: Joi.string().required(),
   }).required(),
+  role: Joi.string().valid('admin', 'employee', 'user').optional(), 
 });
 
 // Joi schema for updating a user by email
@@ -22,6 +23,7 @@ export const updateUserSchema = Joi.object({
     state: Joi.string(),
     city: Joi.string(),
   }),
+  role: Joi.string().valid('admin', 'employee', 'user').optional(),
 });
 
 
@@ -35,4 +37,5 @@ export const updateUserByIdSchema = Joi.object({
     state: Joi.string().required(),
     city: Joi.string().required()
   }).required(),
+  role: Joi.string().valid('admin', 'employee', 'user').optional(), 
 });
