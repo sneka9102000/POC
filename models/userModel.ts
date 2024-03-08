@@ -1,3 +1,4 @@
+import { any } from '@hapi/joi';
 import mongoose, { Schema, Document } from 'mongoose';
 
 interface IAddress {
@@ -12,7 +13,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   residential_address: IAddress; 
-  role: 'admin' | 'employee' | 'user';
+  role: string; // Change role type to string
 }
 
 const UserSchema: Schema = new Schema({
@@ -25,7 +26,7 @@ const UserSchema: Schema = new Schema({
     state: { type: String, required: true },
     city: { type: String, required: true },
   },
-  role: { type: String, enum: ['admin', 'employee', 'user'], required: true },
+  role: { type: String, required: true },
 });
 
 export default mongoose.model<IUser>('Users', UserSchema);
