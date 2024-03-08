@@ -1,5 +1,5 @@
 import { ServerRoute } from '@hapi/hapi';
-import { createUser, getUsers, getUserByEmail, deleteUser, updateUser } from '../controllers/usercontroller';
+import { createUser, getUsers, getUserByEmail, deleteUser, updateUser,updateUserById } from '../controllers/userController';
 
 const routes: ServerRoute[] = [
   {
@@ -21,6 +21,11 @@ const routes: ServerRoute[] = [
     method: 'PUT',
     path: '/api/users/{email}',
     handler: updateUser,
+  },
+  {
+    method: 'PUT',
+    path: '/api/users/update/{id}',
+    handler: updateUserById,
   },
   {
     method: 'DELETE',

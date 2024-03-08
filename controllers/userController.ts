@@ -1,11 +1,14 @@
 import { Request, ResponseToolkit } from '@hapi/hapi';
-import { UserService } from '../services/userservice';
-import { IUser } from '../models/usermodel';
-import * as validation from '../validations/uservalidation'; 
+import { UserService } from '../services/userService';
+import { IUser } from '../models/userModel';
+import * as validation from '../validations/userValidation'; 
 
 export const createUser = async (request: Request, h: ResponseToolkit) => {
   try {
     const userData: IUser = request.payload as IUser;
+     if (userData.residential_address) {
+      delete userData.residential_address._id;
+    }
     const { error, value } = validation.createUserSchema.validate(userData);
     if (error) {
       return h.response(error.details[0].message).code(400); 
@@ -38,6 +41,7 @@ export const getUserByEmail = async (request: Request, h: ResponseToolkit) => {
     return h.response({ error: 'Internal server error', message: error.message }).code(500);
   }
 };
+
 export const updateUser = async (request: Request, h: ResponseToolkit) => {
   try {
     const userEmail = request.params.email;
@@ -45,12 +49,33 @@ export const updateUser = async (request: Request, h: ResponseToolkit) => {
     if (error) {
       return h.response(error.details[0].message).code(400);
     }
-    
-    // Remove _id field from payload
-    const payload: Partial<IUser> = { ...value };
-    delete payload._id;
+    const payload: Partial<IUser> = { ...value, _id: userEmail };
+    delete payload._id; 
 
     const updatedUser = await UserService.updateUser(userEmail, payload);
+    if (!updatedUser) {
+      return h.response('User not found').code(404);
+    }
+    return h.response(updatedUser).code(200);
+  } catch (error:any) {
+    return h.response(error.message).code(500);
+  }
+};
+
+
+
+export const updateUserById = async (request: Request, h: ResponseToolkit) => {
+  try {
+    const userId = request.params.id; 
+    const { error, value } = validation.updateUserByIdSchema.validate(request.payload);
+    if (error) {
+      return h.response(error.details[0].message).code(400);
+    }
+
+    const payload: Partial<IUser> = { ...value, _id: userId };
+
+
+    const updatedUser = await UserService.updateUserById(userId, payload);
     if (!updatedUser) {
       return h.response('User not found').code(404);
     }

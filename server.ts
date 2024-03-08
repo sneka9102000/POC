@@ -3,6 +3,9 @@ import Hapi from '@hapi/hapi';
 import { ConnectOptions } from 'mongodb';
 import mongoose from 'mongoose';
 import routes from './routes/routes';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 const init = async () => {
   const server = Hapi.server({
@@ -10,19 +13,25 @@ const init = async () => {
     host: 'localhost'
   });
 
-  // MongoDB connection URL
-  const MONGODB_URL = 'mongodb://localhost:27017/mydatabase';
+  // MongoDB connection URL from env
+  const MONGODB = process.env.MONGODB_URL;
+
+  if (!MONGODB) {
+    console.error('MongoDB connection URL is not provided in the environment variables.');
+    process.exit(1);
+  }
 
 
 
   try {
-    await mongoose.connect(MONGODB_URL, {
+    await mongoose.connect(MONGODB, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     } as ConnectOptions);
 
     console.log('MongoDB connected');
   } 
+  
   catch (error) {
     console.error('MongoDB connection error:', error);
     process.exit(1);
