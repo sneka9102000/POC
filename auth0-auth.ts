@@ -25,7 +25,7 @@ const init = async (server: Server) => {
       cache: true,
       rateLimit: true,
       jwksRequestsPerMinute: 5,
-      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`,
+      jwksUri: `https://dev-pwgws0wqro5atj3i.us.auth0.com/.well-known/jwks.json`,
     }),
     verifyOptions: {
       audience: process.env.AUTH0_CLIENT_ID,

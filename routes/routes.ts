@@ -1,6 +1,6 @@
 import { ServerRoute } from '@hapi/hapi';
 import { createUser, getUsers, getUserByEmail, deleteUser, updateUser,updateUserById } from '../controllers/userController';
-import { login, signup } from '../controllers/authController';
+import { fetchProfileData, login, signup } from '../controllers/authController';
 
 const routes: ServerRoute[] = [
   {
@@ -17,6 +17,11 @@ const routes: ServerRoute[] = [
     method: 'POST',
     path: "/api/login", 
     handler: login,
+  },
+  {
+    method: 'GET',
+    path: '/api/profile',
+    handler: fetchProfileData,
   },
   {
     method: 'POST',
