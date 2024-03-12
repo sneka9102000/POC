@@ -19,7 +19,6 @@ export const createUser = async (request: Request, h: ResponseToolkit) => {
       console.log(`Role '${userData.role}' created with user '${newUser.name}'`);
     } else {
       const roleId = role._id.toString()
-      console.log(roleId)
 
       role.users.push({ userid: newUser._id, name: newUser.name });
       await role.save();
@@ -28,9 +27,6 @@ export const createUser = async (request: Request, h: ResponseToolkit) => {
       newUser.role = roleId; 
       await newUser.save();
     }
-    
-      
-  
     return newUser;
   } 
   catch (error) {

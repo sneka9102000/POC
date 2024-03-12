@@ -4,8 +4,13 @@ import { ConnectOptions } from 'mongodb';
 import mongoose from 'mongoose';
 import routes from './routes/routes';
 import dotenv from 'dotenv';
+// import Auth0Auth from './auth0-auth';
 
 dotenv.config()
+
+const crypto = require('crypto');
+
+const secretKey = crypto.randomBytes(32).toString('hex');
 
 const init = async () => {
   const server = Hapi.server({
@@ -39,6 +44,7 @@ const init = async () => {
 
 
   server.route(routes);
+  // await Auth0Auth.init(server);
 
   await server.start();
   console.log('Server running on %s', server.info.uri);

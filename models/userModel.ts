@@ -13,7 +13,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   residential_address: IAddress; 
-  role: string; // Change role type to string
+  role: string; 
 }
 
 const UserSchema: Schema = new Schema({
